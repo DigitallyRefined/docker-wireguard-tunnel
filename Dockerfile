@@ -2,6 +2,8 @@
 
 FROM ubuntu:jammy
 
+LABEL org.opencontainers.image.source=https://github.com/DigitallyRefined/docker-wireguard-tunnel
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=xterm
 

@@ -1,0 +1,49 @@
+name: Check for updates
+
+on:
+  schedule:
+    - cron:  '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-for-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check if base image update available
+        id: image-update
+        run: |
+          docker pull ubuntu:jammy
+          docker images --format '{{.ID}}' ubuntu:jammy > .github/docker-image-built-against
+          needs_updating=`git status --porcelain`
+          echo "needs-updating=`[[ $needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
+
+      - name: Does base image need updating
+        run: echo "${{ steps.image-update.outputs.needs-updating }}"
+
+      - name: Check if there are any package updates
+        id: pkg-update
+        run: |
+          docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest bash -c ' \
+          apt update > /dev/null && \
+          echo "needs-updating=`apt -s -o Debug::NoLocking=true upgrade | grep ^Inst > /dev/null && echo true || echo false`"' >>$GITHUB_OUTPUT
+
+      - name: Do packages need updating
+        run: echo "${{ steps.pkg-update.outputs.needs-updating }}"
+
+      - name: Build and push
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: docker-wireguard-tunnel
+          tags: v1, latest
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+        if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
+
+      - name: Commit and push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

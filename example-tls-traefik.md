@@ -29,7 +29,7 @@ services:
       - "traefik"
 
   wireguard-server:
-    build: .
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1
     container_name: wireguard-server
     environment:
       # Update to your domain
@@ -154,7 +154,7 @@ Move the `peers/peer1.conf` file that was automatically generated when starting 
 ```yml
 services:
   wireguard-peer:
-    build: .
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1
     container_name: wireguard-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
