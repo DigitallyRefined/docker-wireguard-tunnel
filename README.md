@@ -11,6 +11,9 @@ For example a Docker server without a public IP address behind a NAT can expose 
 
 ## Usage Example
 
+This assumes that you have already setup a subdomain DNS entry for your domain, for example:  
+`wireguard-server.example.com`
+
 ### Server
 
 Will accept connections on behalf of a peer and tunnel them to the designated peer.
@@ -34,7 +37,6 @@ services:
       - NET_ADMIN
     volumes:
       - ./config:/etc/wireguard
-      - ./peers:/mnt/peers
     restart: unless-stopped
     ports:
       - '51820:51820/udp'
@@ -43,16 +45,17 @@ services:
 ```
 
 ```bash
-docker compose up
+docker compose up -d
+docker compose logs -f
 ```
 
-Once started, a `peer1.conf` file will be saved under the `peers` directory.
+Once started, a `peer1.conf` file will be automatically generated in the `config` directory.
 
 ### Peer
 
 Will connect to the server via WireGuard and setup a tunnel to expose the listed ports.
 
-Move the `peers/peer1.conf` file that was automatically generated when starting the server and rename it to `config/wg0.conf` on the peer.
+Move the `config/peer1.conf` file from the server that was automatically generated and rename it to `config/wg0.conf` on the peer.
 
 `docker-compose.yml`
 
@@ -83,11 +86,15 @@ services:
 ```
 
 ```bash
-docker compose up
+docker compose up -d
+docker compose logs -f
 ```
 
-Once started you should be able to access both nginx servers via their exposed ports on the WireGuard server.
+Note: if you have a firewall in front of your server you will need to allow connections on port `51820/udp` for the WireGuard server, and connections on ports `8080` and `8081` for the 2 demo nginx servers.
+
+Once started you should be able to access both nginx servers via their exposed ports on the WireGuard server, for example:  
+`wireguard-server.example.com:8080` and `wireguard-server.example.com:8081`
 
 You may want to combine the WireGuard tunnel server with [Traefik](example-tls-traefik.md) or [Nginx Proxy Manager](https://nginxproxymanager.com/) to automatically provision TLS/HTTPS certificates.
 
-For a full example see [using Docker WireGuard Tunnel with Traefik](example-tls-traefik.md)
+For a full example see [using Docker WireGuard Tunnel with Traefik](example-tls-traefik.md).

@@ -30,5 +30,6 @@ RUN \
 
 COPY wg-start.sh /usr/local/bin/wireguard
 
-EXPOSE 51820
+EXPOSE 51820/udp
+
 CMD ["wireguard"]
