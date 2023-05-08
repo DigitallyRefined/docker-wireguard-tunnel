@@ -54,14 +54,15 @@ for serv in "${SERVICE[@]}"; do
   expose_port_as=${service_parts[3]}
 
   if [[ ${DOMAIN} && ${PEERS} ]]; then
-    iptables -t nat -A PREROUTING -p tcp --dport $expose_port_as -j DNAT --to-destination 10.0.0.$peer_number:$expose_port_as
+    echo "0.0.0.0 $expose_port_as 10.0.0.$peer_number $expose_port_as" >>/etc/rinetd.conf
   else
     container_ip=$(ping -c1 $service_hostname | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p')
-    iptables -t nat -A PREROUTING -p tcp --dport $expose_port_as -j DNAT --to-destination $container_ip:$container_port
+    echo "0.0.0.0 $expose_port_as $container_ip $container_port" >>/etc/rinetd.conf
   fi
 done
 
-iptables -t nat -A POSTROUTING -j MASQUERADE
+echo "$(date): Starting Internet redirection server"
+rinetd
 
 echo "$(date): Starting Wireguard"
 wg-quick up wg0

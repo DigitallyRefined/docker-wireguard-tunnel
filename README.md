@@ -95,6 +95,8 @@ Note: if you have a firewall in front of your server you will need to allow conn
 Once started you should be able to access both nginx servers via their exposed ports on the WireGuard server, for example:  
 `wireguard-server.example.com:8080` and `wireguard-server.example.com:8081`
 
-You may want to combine the WireGuard tunnel server with [Traefik](example-tls-traefik.md) or [Nginx Proxy Manager](https://nginxproxymanager.com/) to automatically provision TLS/HTTPS certificates.
+You may want to combine the WireGuard tunnel server with [Traefik](example-tls-traefik.md) or [Nginx Proxy Manager](https://nginxproxymanager.com/) or use a 3rd party service such as [Fly.io](example-tls-fly-io.md).
 
-For a full example see [using Docker WireGuard Tunnel with Traefik](example-tls-traefik.md).
+Examples using Docker WireGuard Tunnel with:
+* [Traefik](example-tls-traefik.md) to automatically provision TLS/HTTPS certificates
+* [Fly.io](example-tls-fly-io.md) to provision a free server, subdomain and TLS/HTTPS certificates
