@@ -20,7 +20,7 @@ Will accept connections on behalf of a peer and tunnel them to the designated pe
 app = "my-app-1234"
 
 [build]
-  image = "ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1"
+  image = "ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2"
 
 [env]
   DOMAIN = "my-app-1234.fly.dev" # Update this to match your subdomain
@@ -85,7 +85,7 @@ Paste the `peer1.conf` contents from the Fly.io server into a file named `config
 ```yml
 services:
   wireguard-peer:
-    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
     container_name: wireguard-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
@@ -99,7 +99,6 @@ services:
     restart: unless-stopped
     links:
       - nginx:nginx
-      - nginx-demo:nginx-demo
 
   nginx:
     image: nginx

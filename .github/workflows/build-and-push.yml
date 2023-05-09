@@ -22,7 +22,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: docker-wireguard-tunnel
-          tags: v1, latest
+          tags: v2, latest
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}

@@ -15,16 +15,10 @@ RUN \
     curl \
     ifupdown \
     iproute2 \
-    iptables \
     iputils-ping \
-    net-tools \
-    rinetd \
     openresolv \
-    procps \
+    rinetd \
     wireguard-tools && \
-  update-alternatives --set iptables /usr/sbin/iptables-legacy && \
-  update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy && \
-  update-alternatives --set ip6tables /usr/sbin/ip6tables-nft && \
   apt autoremove -y && \
   rm -rf \
     /tmp/* \

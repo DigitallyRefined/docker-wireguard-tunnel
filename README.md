@@ -23,7 +23,7 @@ Will accept connections on behalf of a peer and tunnel them to the designated pe
 ```yml
 services:
   wireguard-server:
-    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
     container_name: wireguard-server
     environment:
       # Update to your domain
@@ -62,7 +62,7 @@ Move the `config/peer1.conf` file from the server that was automatically generat
 ```yml
 services:
   wireguard-peer:
-    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v1
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
     container_name: wireguard-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
