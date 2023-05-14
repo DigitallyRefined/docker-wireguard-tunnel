@@ -80,9 +80,11 @@ services:
 
   nginx:
     image: nginx
+    restart: unless-stopped
 
   nginx-demo:
     image: nginxdemos/hello
+    restart: unless-stopped
 ```
 
 ```bash

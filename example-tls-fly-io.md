@@ -102,6 +102,7 @@ services:
 
   nginx:
     image: nginx
+    restart: unless-stopped
 ```
 
 ```bash
