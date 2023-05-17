@@ -43,6 +43,8 @@ EOF
   fi
 fi
 
+cp /etc/rinetd.conf.ori /etc/rinetd.conf
+
 IFS=',' read -ra SERVICE <<<"$SERVICES"
 for serv in "${SERVICE[@]}"; do
   service_parts=(${serv//\:/ })
@@ -50,8 +52,6 @@ for serv in "${SERVICE[@]}"; do
   service_hostname=${service_parts[1]}
   container_port=${service_parts[2]}
   expose_port_as=${service_parts[3]}
-
-  cp /etc/rinetd.conf /etc/rinetd.conf.ori
 
   if [[ ${DOMAIN} && ${PEERS} ]]; then
     echo "0.0.0.0 $expose_port_as 10.0.0.$peer_number $expose_port_as" >>/etc/rinetd.conf
@@ -68,9 +68,6 @@ echo "$(date): Starting Wireguard"
 wg-quick up wg0
 
 finish() {
-  echo "$(date): Resetting Internet redirection server"
-  cp /etc/rinetd.conf.ori /etc/rinetd.conf
-
   echo "$(date): Shutting down Wireguard"
   timeout 5 wg-quick down wg0
 

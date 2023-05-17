@@ -25,6 +25,8 @@ RUN \
     /var/lib/apt/lists/* \
     /var/tmp/*
 
+RUN cp /etc/rinetd.conf /etc/rinetd.conf.ori
+
 COPY wg-start.sh /usr/local/bin/wireguard
 
 EXPOSE 51820/udp
