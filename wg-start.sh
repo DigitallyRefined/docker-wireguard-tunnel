@@ -51,6 +51,8 @@ for serv in "${SERVICE[@]}"; do
   container_port=${service_parts[2]}
   expose_port_as=${service_parts[3]}
 
+  cp /etc/rinetd.conf /etc/rinetd.conf.ori
+
   if [[ ${DOMAIN} && ${PEERS} ]]; then
     echo "0.0.0.0 $expose_port_as 10.0.0.$peer_number $expose_port_as" >>/etc/rinetd.conf
   else
@@ -66,6 +68,9 @@ echo "$(date): Starting Wireguard"
 wg-quick up wg0
 
 finish() {
+  echo "$(date): Resetting Internet redirection server"
+  cp /etc/rinetd.conf.ori /etc/rinetd.conf
+
   echo "$(date): Shutting down Wireguard"
   timeout 5 wg-quick down wg0
 
