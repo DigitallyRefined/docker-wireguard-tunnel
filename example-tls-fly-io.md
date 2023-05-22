@@ -89,8 +89,8 @@ services:
     container_name: wireguard-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
-      # Services to expose
-      # Format: SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
+      # Services to expose format (comma-separated)
+      # SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
       - SERVICES=peer1:nginx:80:8080
     cap_add:
       - NET_ADMIN

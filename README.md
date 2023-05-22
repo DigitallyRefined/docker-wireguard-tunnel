@@ -30,8 +30,8 @@ services:
       - DOMAIN=wireguard-server.example.com
       # Number of peers to auto generate config for
       - PEERS=1
-      # Services to expose
-      # Format: SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
+      # Services to expose format (comma-separated)
+      # SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
       - SERVICES=peer1:nginx:80:8080,peer1:nginx-demo:80:8081
     cap_add:
       - NET_ADMIN
@@ -66,8 +66,8 @@ services:
     container_name: wireguard-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
-      # Services to expose
-      # Format: SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
+      # Services to expose format (comma-separated)
+      # SERVICES=peer-id:peer-container-name:peer-container-port:expose-port-as
       - SERVICES=peer1:nginx:80:8080,peer1:nginx-demo:80:8081
     cap_add:
       - NET_ADMIN
