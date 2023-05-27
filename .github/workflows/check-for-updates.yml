@@ -26,7 +26,8 @@ jobs:
       - name: Check if there are any package updates
         id: pkg-update
         run: |
-          docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest bash -c ' \
+          docker pull ghcr.io/digitallyrefined/docker-wireguard-tunnel
+          docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel bash -c ' \
           apt update > /dev/null && \
           echo "needs-updating=`apt -s -o Debug::NoLocking=true upgrade | grep ^Inst > /dev/null && echo true || echo false`"' >>$GITHUB_OUTPUT
 
