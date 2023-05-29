@@ -1,33 +1,37 @@
 #!/usr/bin/env bash
 
+wireguard_port="${WIREGUARD_PORT:-51820}"
+wireguard_mtu="${WIREGUARD_MTU:-1280}"
+
 if [ ! -f /etc/wireguard/wg0.conf ]; then
   server_private="$(wg genkey)"
-  server_public=$(echo "${server_private}" | wg pubkey)
+  server_public=$(echo -n "${server_private}" | wg pubkey)
 
   cat >/etc/wireguard/wg0.conf <<EOF
 [Interface]
 PrivateKey = $server_private
-# PublicKey = $server_public
-Address = 10.0.0.254/24
-ListenPort = 51820
-SaveConfig = true
+Address = 10.0.0.254/32
+ListenPort = $wireguard_port
+MTU = $wireguard_mtu
+SaveConfig = false
 EOF
 
   if [[ ${DOMAIN} && ${PEERS} ]]; then
     count=${PEERS//[a-z]/}
     for peer_number in $(seq $count); do
       peer_private="$(wg genkey)"
-      peer_public=$(echo "${peer_private}" | wg pubkey)
+      peer_public=$(echo -n "${peer_private}" | wg pubkey)
 
       cat >/etc/wireguard/peer$peer_number.conf <<EOF
 [Interface]
 PrivateKey = $peer_private
-# PublicKey = $peer_public
-Address = 10.0.0.$peer_number/15
+Address = 10.0.0.$peer_number/32
+MTU = $wireguard_mtu
+SaveConfig = false
 
 [Peer]
 PublicKey = $server_public
-Endpoint = $DOMAIN:51820
+Endpoint = $DOMAIN:$wireguard_port
 AllowedIPs = 10.0.0.254/32
 PersistentKeepalive = 25
 EOF
@@ -35,7 +39,6 @@ EOF
       cat >>/etc/wireguard/wg0.conf <<EOF
 
 [Peer]
-# peer$peer_number
 PublicKey = $peer_public
 AllowedIPs = 10.0.0.$peer_number/32
 EOF
