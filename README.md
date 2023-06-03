@@ -12,7 +12,7 @@ For example a Docker server without a public IP address behind a NAT can expose 
 ## Usage Example
 
 This assumes that you have already setup a subdomain DNS entry for your domain, for example:  
-`wireguard-server.example.com`
+`wireguard-tunnel.example.com`
 
 ### Server
 
@@ -22,12 +22,12 @@ Will accept connections on behalf of a peer and tunnel them to the designated pe
 
 ```yml
 services:
-  wireguard-server:
+  wireguard-tunnel-server:
     image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
-    container_name: wireguard-server
+    container_name: wireguard-tunnel-server
     environment:
       # Update to your domain
-      - DOMAIN=wireguard-server.example.com
+      - DOMAIN=wireguard-tunnel.example.com
       # Number of peers to auto generate config for
       - PEERS=1
       # Services to expose format (comma-separated)
@@ -61,9 +61,9 @@ Move the `config/peer1.conf` file from the server that was automatically generat
 
 ```yml
 services:
-  wireguard-peer:
+  wireguard-tunnel-peer:
     image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
-    container_name: wireguard-peer
+    container_name: wireguard-tunnel-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
       # Services to expose format (comma-separated)
@@ -95,7 +95,7 @@ docker compose logs -f
 Note: if you have a firewall in front of your server you will need to allow connections on port `51820/udp` for the WireGuard server, and connections on ports `8080` and `8081` for the 2 demo nginx servers.
 
 Once started you should be able to access both nginx servers via their exposed ports on the WireGuard server, for example:  
-`wireguard-server.example.com:8080` and `wireguard-server.example.com:8081`
+`wireguard-tunnel.example.com:8080` and `wireguard-tunnel.example.com:8081`
 
 You may want to combine the WireGuard tunnel server with [Traefik](example-tls-traefik.md) or [Nginx Proxy Manager](https://nginxproxymanager.com/) or use a 3rd party service such as [Fly.io](example-tls-fly-io.md).
 

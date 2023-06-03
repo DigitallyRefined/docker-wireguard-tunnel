@@ -84,9 +84,9 @@ Paste the `peer1.conf` contents from the Fly.io server into a file named `config
 
 ```yml
 services:
-  wireguard-peer:
+  wireguard-tunnel-peer:
     image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
-    container_name: wireguard-peer
+    container_name: wireguard-tunnel-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
       # Services to expose format (comma-separated)

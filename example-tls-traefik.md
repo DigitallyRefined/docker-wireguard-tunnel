@@ -3,7 +3,7 @@
 [Traefik](https://traefik.io/) can allow multiple Docker services to be served from a single server using different domain names and can automatically provision TLS/HTTPS certificates via [Let's Encrypt](https://letsencrypt.org/) and a HTTP challenge.
 
 This assumes that you have already setup subdomain DNS entries for your domain, for example:  
-`wireguard-server.example.com`, `nginx.example.com` and `nginxdemos.example.com`
+`wireguard-tunnel.example.com`, `nginx.example.com` and `nginx-demo.example.com`
 
 ## Server
 
@@ -28,12 +28,12 @@ services:
     networks:
       - "traefik"
 
-  wireguard-server:
+  wireguard-tunnel-server:
     image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
-    container_name: wireguard-server
+    container_name: wireguard-tunnel-server
     environment:
       # Update to your domain
-      - DOMAIN=wireguard-server.example.com
+      - DOMAIN=wireguard-tunnel.example.com
       # Number of peers to auto generate config for
       - PEERS=1
       # Services to expose format (comma-separated)
@@ -57,11 +57,11 @@ services:
       traefik.http.routers.nginx.tls.certresolver: production
       traefik.http.services.nginx.loadbalancer.server.port: 8080
 
-      traefik.http.routers.nginx.entrypoints: web,websecure
-      traefik.http.routers.nginx.rule: Host(`nginxdemos.example.com`) # Update to your domain
-      traefik.http.routers.nginx.tls: true
-      traefik.http.routers.nginx.tls.certresolver: production
-      traefik.http.services.nginx.loadbalancer.server.port: 8081
+      traefik.http.routers.nginx-demo.entrypoints: web,websecure
+      traefik.http.routers.nginx-demo.rule: Host(`nginx-demo.example.com`) # Update to your domain
+      traefik.http.routers.nginx-demo.tls: true
+      traefik.http.routers.nginx-demo.tls.certresolver: production
+      traefik.http.services.nginx-demo.loadbalancer.server.port: 8081
 
 networks:
   traefik:
@@ -153,9 +153,9 @@ Move the `config/peer1.conf` file from the server that was automatically generat
 
 ```yml
 services:
-  wireguard-peer:
+  wireguard-tunnel-peer:
     image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
-    container_name: wireguard-peer
+    container_name: wireguard-tunnel-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
       # Services to expose format (comma-separated)
@@ -187,4 +187,4 @@ docker compose logs -f
 Note: if you have a firewall in front of your server you will need to allow connections on port `51820/udp` for the WireGuard server, and connections on ports `80` and `443` for Traefik.
 
 Once started you should be able to access both nginx servers via the domain names listed on the WireGuard server, for example:   
-`https://nginx.example.com` and `https://nginxdemos.example.com`
+`https://nginx.example.com` and `https://nginx-demo.example.com`
