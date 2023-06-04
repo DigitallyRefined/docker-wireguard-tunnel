@@ -17,22 +17,19 @@ jobs:
         run: |
           docker pull ubuntu:jammy
           docker images --format '{{.ID}}' ubuntu:jammy > .github/docker-image-built-against
-          needs_updating=`git status --porcelain`
-          echo "needs-updating=`[[ $needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
-
-      - name: Does base image need updating
-        run: echo "${{ steps.image-update.outputs.needs-updating }}"
+          img_needs_updating=`git status --porcelain`
+          set -x
+          echo "needs-updating=`[[ $img_needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
 
       - name: Check if there are any package updates
         id: pkg-update
         run: |
           docker pull ghcr.io/digitallyrefined/docker-wireguard-tunnel
-          docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel bash -c ' \
+          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel bash -c ' \
           apt update > /dev/null && \
-          echo "needs-updating=`apt -s -o Debug::NoLocking=true upgrade | grep ^Inst > /dev/null && echo true || echo false`"' >>$GITHUB_OUTPUT
-
-      - name: Do packages need updating
-        run: echo "${{ steps.pkg-update.outputs.needs-updating }}"
+          apt -s -o Debug::NoLocking=true upgrade | { grep ^Inst || true; }'`
+          set -x
+          echo "needs-updating=`[[ $pkgs_to_update ]] && echo true || echo false`" >>$GITHUB_OUTPUT
 
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v6
