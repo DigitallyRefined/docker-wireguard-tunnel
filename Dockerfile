@@ -2,7 +2,10 @@
 
 FROM ubuntu:jammy
 
+ARG TARGETPLATFORM
+
 LABEL org.opencontainers.image.source=https://github.com/DigitallyRefined/docker-wireguard-tunnel
+LABEL org.opencontainers.image.description="docker-wireguard-tunnel ${TARGETPLATFORM}"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=xterm
