@@ -24,11 +24,12 @@ LABEL org.opencontainers.image.source=https://github.com/digitallyrefined/tmp
 LABEL org.opencontainers.image.description="docker-wireguard-tunnel ${TARGETPLATFORM}"
 
 COPY --from=builder /tmp/rinetd/rinetd /usr/sbin/rinetd
+COPY --from=builder /tmp/rinetd/rinetd.conf /etc/rinetd.conf.ori
 
 RUN apk add --no-cache wireguard-tools
 
-COPY wg-start.sh /usr/sbin/wireguard
+COPY wg-start.sh /usr/sbin/wg-start.sh
 
-CMD ["/usr/sbin/wireguard"]
+CMD ["/usr/sbin/wg-start.sh"]
 
 EXPOSE 51820/udp
