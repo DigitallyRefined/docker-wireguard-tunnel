@@ -12,11 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Check if base image update available
+      - name: Check if image needs updating
         id: image-update
         run: |
           docker pull alpine:3.18
           docker images --format '{{.ID}}' alpine:3.18 > .github/docker-image-built-against
+          git ls-remote https://github.com/samhocevar/rinetd.git main > .github/docker-rinetd-built-against
           img_needs_updating=`git status --porcelain`
           set -x
           echo "needs-updating=`[[ $img_needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
@@ -25,9 +26,8 @@ jobs:
         id: pkg-update
         run: |
           docker pull ghcr.io/digitallyrefined/tmp
-          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/tmp bash -c ' \
-          apt update > /dev/null && \
-          apt -s -o Debug::NoLocking=true upgrade | { grep ^Inst || true; }'`
+          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/tmp sh -c ' \
+          apk upgrade --simulate --no-cache | { grep Upgrading || true; }'`
           set -x
           echo "needs-updating=`[[ $pkgs_to_update ]] && echo true || echo false`" >>$GITHUB_OUTPUT
 

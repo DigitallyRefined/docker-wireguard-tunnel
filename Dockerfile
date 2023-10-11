@@ -3,6 +3,7 @@
 FROM alpine:3.18 AS builder
 
 RUN set -ex \
+  && apk upgrade --no-cache \
   && apk add --no-cache \
     build-base \
     git \
@@ -26,6 +27,7 @@ LABEL org.opencontainers.image.description="docker-wireguard-tunnel ${TARGETPLAT
 COPY --from=builder /tmp/rinetd/rinetd /usr/sbin/rinetd
 COPY --from=builder /tmp/rinetd/rinetd.conf /etc/rinetd.conf.ori
 
+RUN apk upgrade --no-cache
 RUN apk add --no-cache wireguard-tools
 
 COPY wg-start.sh /usr/sbin/wg-start.sh
