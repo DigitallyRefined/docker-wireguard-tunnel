@@ -1,7 +1,7 @@
 # Docker WireGuard Tunnel
 
-[![Build and push workflow](https://github.com/digitallyrefined/tmp/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/digitallyrefined/tmp/actions/workflows/build-and-push.yml)
-[![Check for updates workflow](https://github.com/digitallyrefined/tmp/actions/workflows/check-for-updates.yml/badge.svg)](https://github.com/digitallyrefined/tmp/actions/workflows/check-for-updates.yml)
+[![Build and push workflow](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/build-and-push.yml)
+[![Check for updates workflow](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/check-for-updates.yml/badge.svg)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/check-for-updates.yml)
 
 Connect two or more Docker servers together sharing container ports between them via a [WireGuard](https://www.wireguard.com/) tunnel.
 
@@ -23,7 +23,7 @@ Will accept connections on behalf of a peer and tunnel them to the designated pe
 ```yml
 services:
   wireguard-tunnel-server:
-    image: ghcr.io/digitallyrefined/tmp:v3
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v3
     container_name: wireguard-tunnel-server
     environment:
       # Update to your domain
@@ -62,7 +62,7 @@ Move the `config/peer1.conf` file from the server that was automatically generat
 ```yml
 services:
   wireguard-tunnel-peer:
-    image: ghcr.io/digitallyrefined/tmp:v3
+    image: ghcr.io/digitallyrefined/docker-wireguard-tunnel:v3
     container_name: wireguard-tunnel-peer
     environment:
       # Note that DOMAIN & PEERS are not required for the peer
