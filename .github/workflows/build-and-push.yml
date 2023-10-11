@@ -15,8 +15,8 @@ jobs:
 
       - name: Save base image ID
         run: |
-          docker pull ubuntu:jammy
-          docker images --format '{{.ID}}' ubuntu:jammy > .github/docker-image-built-against
+          docker pull alpine:3.18
+          docker images --format '{{.ID}}' alpine:3.18 > .github/docker-image-built-against
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -40,8 +40,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
+            ghcr.io/digitallyrefined/tmp:latest
+            ghcr.io/digitallyrefined/tmp:v3
 
       - name: Commit and push changes
         uses: actions-js/push@master

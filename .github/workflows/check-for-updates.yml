@@ -15,8 +15,8 @@ jobs:
       - name: Check if base image update available
         id: image-update
         run: |
-          docker pull ubuntu:jammy
-          docker images --format '{{.ID}}' ubuntu:jammy > .github/docker-image-built-against
+          docker pull alpine:3.18
+          docker images --format '{{.ID}}' alpine:3.18 > .github/docker-image-built-against
           img_needs_updating=`git status --porcelain`
           set -x
           echo "needs-updating=`[[ $img_needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
@@ -24,8 +24,8 @@ jobs:
       - name: Check if there are any package updates
         id: pkg-update
         run: |
-          docker pull ghcr.io/digitallyrefined/docker-wireguard-tunnel
-          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel bash -c ' \
+          docker pull ghcr.io/digitallyrefined/tmp
+          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/tmp bash -c ' \
           apt update > /dev/null && \
           apt -s -o Debug::NoLocking=true upgrade | { grep ^Inst || true; }'`
           set -x
@@ -56,8 +56,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
+            ghcr.io/digitallyrefined/tmp:latest
+            ghcr.io/digitallyrefined/tmp:v3
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Commit and push changes

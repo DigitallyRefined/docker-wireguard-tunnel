@@ -20,7 +20,7 @@ FROM alpine:3.18
 
 ARG TARGETPLATFORM
 
-LABEL org.opencontainers.image.source=https://github.com/DigitallyRefined/docker-wireguard-tunnel
+LABEL org.opencontainers.image.source=https://github.com/digitallyrefined/tmp
 LABEL org.opencontainers.image.description="docker-wireguard-tunnel ${TARGETPLATFORM}"
 
 COPY --from=builder /tmp/rinetd/rinetd /usr/sbin/rinetd
