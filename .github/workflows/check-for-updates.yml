@@ -10,13 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Check if base image update available
+      - name: Check if image needs updating
         id: image-update
         run: |
-          docker pull ubuntu:jammy
-          docker images --format '{{.ID}}' ubuntu:jammy > .github/docker-image-built-against
+          docker pull alpine:3.18
+          docker images --format '{{.ID}}' alpine:3.18 > .github/docker-image-built-against
+          git ls-remote https://github.com/samhocevar/rinetd.git main > .github/docker-rinetd-built-against
           img_needs_updating=`git status --porcelain`
           set -x
           echo "needs-updating=`[[ $img_needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
@@ -25,24 +26,23 @@ jobs:
         id: pkg-update
         run: |
           docker pull ghcr.io/digitallyrefined/docker-wireguard-tunnel
-          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel bash -c ' \
-          apt update > /dev/null && \
-          apt -s -o Debug::NoLocking=true upgrade | { grep ^Inst || true; }'`
+          pkgs_to_update=`docker run --rm ghcr.io/digitallyrefined/docker-wireguard-tunnel sh -c ' \
+          apk upgrade --simulate --no-cache | { grep Upgrading || true; }'`
           set -x
           echo "needs-updating=`[[ $pkgs_to_update ]] && echo true || echo false`" >>$GITHUB_OUTPUT
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@15c905b16b06416d2086efa066dd8e3a35cc7f98
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
         with:
           driver-opts: 'image=moby/buildkit:v0.10.5'
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
@@ -50,14 +50,14 @@ jobs:
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v2
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v3
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Commit and push changes
