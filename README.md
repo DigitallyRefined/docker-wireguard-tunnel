@@ -100,5 +100,6 @@ Once started you should be able to access both nginx servers via their exposed p
 You may want to combine the WireGuard tunnel server with [Traefik](example-tls-traefik.md) or [Nginx Proxy Manager](https://nginxproxymanager.com/) or use a 3rd party service such as [Fly.io](example-tls-fly-io.md).
 
 Examples using Docker WireGuard Tunnel with:
+
 * [Traefik](example-tls-traefik.md) to automatically provision TLS/HTTPS certificates
-* [Fly.io](example-tls-fly-io.md) to provision a free server, subdomain and TLS/HTTPS certificates
+* [Fly.io](example-tls-fly-io.md) to provision a server, subdomain and TLS/HTTPS certificates

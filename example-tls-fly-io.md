@@ -1,8 +1,8 @@
 # Example using Docker WireGuard Tunnel with Fly.io
 
-[Fly.io](https://fly.io/) is a platform to deploy app servers. Their free allowance is quite generous and works with Docker WireGuard Tunnels.
+[Fly.io](https://fly.io/) is a platform to deploy app servers. Note that this is a paid service and may [charge for dedicated IP addresses](https://fly.io/docs/about/pricing/#anycast-ip-addresses).
 
-This assumes that you have already setup [Fly.io account](https://fly.io/), have [installed their command line tool](https://fly.io/docs/hands-on/install-flyctl/) and have entered your credit card details on your Fly.io account (they wont charge unless you [exceed their free allowances](https://fly.io/docs/about/pricing/)).
+This assumes that you have already setup [Fly.io account](https://fly.io/), have [installed their command line tool](https://fly.io/docs/hands-on/install-flyctl/) and have entered your credit card details on your Fly.io account.
 
 ## Server
 
@@ -53,6 +53,7 @@ app = "my-app-1234"
 ```bash
 fly launch
 ```
+
 Use the following options:
 
 ```log
