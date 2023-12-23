@@ -143,6 +143,13 @@ docker compose logs -f
 
 Once started, a `peer1.conf` file will be automatically generated in the `config` directory.
 
+Next create the certificates storage file with the correct permissions via:
+
+```bash
+docker compose exec traefik install -D -m 600 /dev/null /etc/traefik/certs/acme.json
+docker compose restart
+```
+
 ## Peer
 
 Will connect to the server via WireGuard and setup a tunnel to expose the listed ports.
