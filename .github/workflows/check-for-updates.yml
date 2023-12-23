@@ -15,8 +15,8 @@ jobs:
       - name: Check if image needs updating
         id: image-update
         run: |
-          docker pull alpine:3.18
-          docker images --format '{{.ID}}' alpine:3.18 > .github/docker-image-built-against
+          docker pull alpine:3.19
+          docker images --format '{{.ID}}' alpine:3.19 > .github/docker-image-built-against
           git ls-remote https://github.com/samhocevar/rinetd.git main > .github/docker-rinetd-built-against
           img_needs_updating=`git status --porcelain`
           set -x
