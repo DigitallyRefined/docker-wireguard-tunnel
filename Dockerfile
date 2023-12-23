@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.18 AS builder
+FROM alpine:3.19 AS builder
 
 RUN set -ex \
   && apk upgrade --no-cache \
@@ -17,7 +17,7 @@ RUN set -ex \
   && make -j $(nproc) \
   && strip rinetd
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 ARG TARGETPLATFORM
 
