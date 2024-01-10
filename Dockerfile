@@ -10,6 +10,7 @@ LABEL org.opencontainers.image.description="docker-wireguard-tunnel ${TARGETPLAT
 RUN apk upgrade --no-cache
 RUN apk add --no-cache wireguard-tools
 RUN apk add --no-cache rinetd --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+RUN cp /etc/rinetd.conf /etc/rinetd.conf.ori
 
 COPY wg-start.sh /usr/sbin/wg-start.sh
 
