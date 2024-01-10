@@ -46,7 +46,7 @@ EOF
   fi
 fi
 
-cp /etc/rinetd.conf.ori /etc/rinetd.conf
+cp /etc/rinetd.conf
 
 IFS=',' read -ra SERVICE <<<"$SERVICES"
 for serv in "${SERVICE[@]}"; do
