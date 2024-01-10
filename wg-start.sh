@@ -59,8 +59,7 @@ for serv in "${SERVICE[@]}"; do
   if [[ ${DOMAIN} && ${PEERS} ]]; then
     echo "0.0.0.0 $expose_port_as 10.0.0.$peer_number $expose_port_as" >>/etc/rinetd.conf
   else
-    container_ip=$(ping -c1 $service_hostname | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p')
-    echo "0.0.0.0 $expose_port_as $container_ip $container_port" >>/etc/rinetd.conf
+    echo "0.0.0.0 $expose_port_as $service_hostname $container_port" >>/etc/rinetd.conf
   fi
 done
 
