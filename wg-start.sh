@@ -46,8 +46,6 @@ EOF
   fi
 fi
 
-touch /etc/rinetd.conf
-
 IFS=',' read -ra SERVICE <<<"$SERVICES"
 for serv in "${SERVICE[@]}"; do
   service_parts=(${serv//\:/ })
