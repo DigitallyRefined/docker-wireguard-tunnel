@@ -58,8 +58,10 @@ for serv in "${SERVICE[@]}"; do
 
   if [[ ${DOMAIN} && ${PEERS} ]]; then
     echo "0.0.0.0 $expose_port_as 10.0.0.$peer_number $expose_port_as" >>/etc/rinetd.conf
+    echo "0.0.0.0 $expose_port_as/udp 10.0.0.$peer_number $expose_port_as/udp" >>/etc/rinetd.conf
   else
     echo "0.0.0.0 $expose_port_as $service_hostname $container_port" >>/etc/rinetd.conf
+    echo "0.0.0.0 $expose_port_as/udp $service_hostname $container_port/udp" >>/etc/rinetd.conf
   fi
 done
 
