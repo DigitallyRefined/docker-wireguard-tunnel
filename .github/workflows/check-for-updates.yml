@@ -37,6 +37,19 @@ jobs:
           set -x
           echo "needs-updating=`[[ $pkgs_to_update ]] && echo true || echo false`" >>$GITHUB_OUTPUT
 
+      - name: Get latest release tag
+        id: get-latest-tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+          echo "tag=$latest_tag" >> $GITHUB_ENV
+        if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
@@ -63,7 +76,8 @@ jobs:
           push: true
           tags: |
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v3
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}-${{ env.date }}
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Commit and push changes

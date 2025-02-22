@@ -19,6 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Get latest release tag
+        id: get-latest-tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
+          echo "tag=$latest_tag" >> $GITHUB_ENV
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+
       - name: Save image build info
         run: |
           docker pull alpine:3.19
@@ -48,7 +59,8 @@ jobs:
           push: true
           tags: |
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:v3
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}-${{ env.date }}
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
