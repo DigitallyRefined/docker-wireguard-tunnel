@@ -32,9 +32,8 @@ jobs:
 
       - name: Save image build info
         run: |
-          docker pull alpine:3.19
-          docker images --format '{{.ID}}' alpine:3.19 > .github/docker-image-built-against
-          git ls-remote https://github.com/samhocevar/rinetd.git main > .github/docker-rinetd-built-against
+          docker pull alpine:3.21
+          docker images --format '{{.ID}}' alpine:3.21 > .github/docker-image-built-against
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
