@@ -2,6 +2,8 @@
 
 [![Build and push workflow](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/build-and-push.yml)
 [![Check for updates workflow](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/check-for-updates.yml/badge.svg)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/actions/workflows/check-for-updates.yml)
+[![Container registry](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2FDigitallyRefined%2Fdocker-wireguard-tunnel%2Fdocker-wireguard-tunnel.json&query=%24.downloads&label=Pulls)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/pkgs/container/docker-wireguard-tunnel)
+[![Container registry](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2FDigitallyRefined%2Fdocker-wireguard-tunnel%2Fdocker-wireguard-tunnel.json&query=%24.downloads_month&label=Pulls%20per%20month)](https://github.com/DigitallyRefined/docker-wireguard-tunnel/pkgs/container/docker-wireguard-tunnel)
 
 Connect two or more Docker servers together sharing container ports between them via a [WireGuard](https://www.wireguard.com/) tunnel.
 
