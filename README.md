@@ -76,6 +76,13 @@ services:
     volumes:
       - ./config:/etc/wireguard
     restart: unless-stopped
+    init: true
+    healthcheck:
+      test: ping 10.0.0.254 -c 1 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 20s
     links:
       - nginx:nginx
       - nginx-demo:nginx-demo
