@@ -21,8 +21,8 @@ jobs:
       - name: Check if image needs updating
         id: image-update
         run: |
-          docker pull alpine:3.22
-          docker images --format '{{.ID}}' alpine:3.22 > .github/docker-image-built-against
+          docker pull alpine:3.23
+          docker images --format '{{.ID}}' alpine:3.23 > .github/docker-image-built-against
           img_needs_updating=`git status --porcelain`
           set -x
           echo "needs-updating=`[[ $img_needs_updating ]] && echo true || echo false`" >>$GITHUB_OUTPUT
@@ -42,6 +42,8 @@ jobs:
           git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
           echo "tag=$latest_tag" >> $GITHUB_ENV
+          major_version="${latest_tag%%.*}"
+          echo "major_version=$major_version" >> $GITHUB_ENV
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Get current date
@@ -75,6 +77,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.major_version }}
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}-${{ env.date }}
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
