@@ -48,7 +48,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "date=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_ENV
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Set up QEMU
@@ -79,7 +79,7 @@ jobs:
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.major_version }}
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}-${{ env.date }}
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}.${{ env.date }}
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Commit and push changes

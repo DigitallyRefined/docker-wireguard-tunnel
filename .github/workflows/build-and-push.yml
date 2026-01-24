@@ -30,7 +30,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "date=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - name: Save image build info
         run: |
@@ -62,7 +62,7 @@ jobs:
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:latest
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.major_version }}
             ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}
-            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}-${{ env.date }}
+            ghcr.io/digitallyrefined/docker-wireguard-tunnel:${{ env.tag }}.${{ env.date }}
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v7
