@@ -52,7 +52,7 @@ jobs:
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         if: steps.image-update.outputs.needs-updating == 'true' || steps.pkg-update.outputs.needs-updating == 'true'
 
       - name: Set up Docker Buildx
